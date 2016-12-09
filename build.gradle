@@ -32,5 +32,16 @@ dependencies {
     // tag::tests[]
     testCompile("org.springframework.boot:spring-boot-starter-test")
     // end::tests[]
+    
+    compile group: 'org.springframework.data', name: 'spring-data-mongodb', version: '1.9.5.RELEASE'
+    
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-core', version: '1.0.0.RELEASE'
+    
+    compile group: 'org.springframework', name: 'spring-orm', version: '4.3.4.RELEASE'
+    
+   
+    
 }
+
+
 

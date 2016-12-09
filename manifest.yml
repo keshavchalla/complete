@@ -1,0 +1,7 @@
+applications:
+- name: MongoLoggerApp
+  memory: 512M
+  path: .\build\libs\gs-spring-boot-0.1.0.jar
+
+services:
+-  LoggerMongo

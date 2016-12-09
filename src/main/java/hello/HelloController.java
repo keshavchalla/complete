@@ -4,9 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import hello.exception.CustomerIdentityServiceValidator;
+import hello.exception.ExceptionHelper;
+import hello.exception.InputValidationException;
+import hello.exception.ProcessorException;
 import hello.model.City;
 import hello.model.CustomerDetails;
 import hello.model.WeatherObservation;
@@ -17,6 +23,9 @@ public class HelloController {
 	
 	@Autowired
 	private WeatherService weatherService;
+	
+	@Autowired
+	private CustomerIdentityServiceValidator customerIdentityServiceValidator;
     
     @RequestMapping("/")
     public String index() {
@@ -60,6 +69,44 @@ public class HelloController {
     	cdList.add(cd2);
     	cdList.add(cd3);
     	return cdList;
+    }
+    
+    @RequestMapping("/getCustomException")
+    public ResponseEntity<?> getCustomException() {
+    	ResponseEntity<?> results = null;
+    	try{
+    		System.out.println("Hellooo");
+    		weatherService.getExceptionMessage("Test");
+    	}catch(ProcessorException e){
+    		results = ExceptionHelper.handleServiceExceptions("My Exception","10011");
+    	}
+    	return results;
+    }
+    
+    @RequestMapping("/throwCustomException")
+    public ResponseEntity<?> throwCustomException() {
+    	ResponseEntity<?> results = null;
+    	try{
+    		System.out.println("Hellooo");
+    		weatherService.getExceptionMessage("Test");
+    	}catch(ProcessorException e){
+    		System.out.println("Message :"+e.getMessage());
+    		System.out.println("Code :"+e.getErrorCode());
+    		results = ExceptionHelper.handleServiceExceptions(e);
+    	}
+    	return results;
+    }
+    
+    @RequestMapping("/validateTelephoneNumber/{tnNumber}")
+    public ResponseEntity<?> validateTelephoneNumber(@PathVariable("tnNumber") String tnNumber) {
+    	ResponseEntity<?> results = null;
+    	try{
+    		//weatherService.validateTelephoneNumber(tnNumber);
+    		customerIdentityServiceValidator.validateGetAccountTNs(tnNumber);
+    	}catch(InputValidationException e){
+    		results = ExceptionHelper.handleServiceExceptions(e);
+    	}
+    	return results;
     }
     
 }
